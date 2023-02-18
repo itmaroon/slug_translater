@@ -22,6 +22,8 @@ require SLTRANSLATE_PLUGIN_PATH.'vendor/autoload.php';
 
 //現在のパーマリンク設定
 $LINK_FORMAT=get_option('permalink_structure');
+//現在処理しているページ名
+$ACTIVE_PAGE='';
 
 //新規投稿フラグ
 $NEW_POST_FLG=false;
@@ -36,7 +38,7 @@ function sl_trans_session_start(){
     session_start();
   }
 }
-add_action('init', 'sl_trans_session_start');
+//add_action('init', 'sl_trans_session_start');
 
 //プラグイン用get_template_part
 function sl_trans_get_template_part($slug, $name = null) {
@@ -244,16 +246,15 @@ function sl_trans_init_settings() {
     'sl_trans_check_func', // 設定項目のHTMLを出力する関数名.
     'sl_trans_setting', // メニュースラッグ.
     'sl_trans_setting-section-2', // どのセクションに表示するか.
-		['sl_trans_check']
   );
 
 	add_settings_field(
-    'sl_trans_check', // 設定名.
-    '', // 設定タイトル.
-    'sl_trans_check_func', // 設定項目のHTMLを出力する関数名.
+    'sl_trans_page', // 設定名.
+    'ページのスラッグ（複数の場合はカンマ区切り）', // 設定タイトル.
+    'sl_trans_text_func', // 設定項目のHTMLを出力する関数名.
     'sl_trans_setting', // メニュースラッグ.
     'sl_trans_setting-section-3', // どのセクションに表示するか.
-		['sl_trans_input']
+		['sl_trans_page']
   );
 
   add_settings_field(
@@ -296,6 +297,13 @@ function sl_trans_init_settings() {
       'sanitize_callback' => 'esc_attr',
     ]
   );
+	register_setting(
+    'sl_trans_setting_group',
+    'sl_trans_page',
+    [
+      'sanitize_callback' => 'esc_attr',
+    ]
+  );
   register_setting(
     'sl_trans_setting_group',
     'sl_trans_timing_check'
@@ -324,7 +332,7 @@ function sl_trans_permalink_section_func() {
   global $LINK_FORMAT;
   preg_match('/\%postname\%/', $LINK_FORMAT, $m);
   if(isset($m[0])){
-    echo '<p class="permalink_caution">パーマリンク設定は「'.esc_html($LINK_FORMAT).'」です。<br>%postname%の部分が英訳されて置き換わります。</p>';
+    echo '<p class="permalink_caution">パーマリンク設定は「'.esc_html($LINK_FORMAT).'」です。<br>%postname%の部分が英訳されて置き換わります。</p><p>次に指定したページから投稿された記事のパーマリンクは置き換えないようにすることができます。';
   }else{
     echo '<p class="permalink_caution"><strong>パーマリンク設定に%postname%が含まれていません。</strong><br>英訳に置き換えるには%postname%が含まれる設定にしてください。パーマリンク設定は<a href="'.esc_url(home_url()).'/wp-admin/options-permalink.php">こちら</a></p>';
   }
@@ -346,13 +354,8 @@ function sl_trans_text_func($input_arr) {
  * 単独のチェックボックス
  */
 function sl_trans_check_func($input_arr) {
-	if($input_arr[0]==='sl_trans_input'){
-		$option = get_option( 'sl_trans_input_check','on' );
-		echo '<label><input type="checkbox" name="sl_trans_input_check" value="on" ' . checked( 'on', $option, false ) . ' />投稿画面に次のIDをもつINPUT要素がある場合は、そこに出力する</label> ';
-	}else{
-		$option = get_option( 'sl_trans_timing_check','on' );
-		echo '<label><input type="checkbox" name="sl_trans_timing_check" value="on" ' . checked( 'on', $option, false ) . ' />初回の公開時にのみスラッグを置き換える</label> ';
-	}
+	$option = get_option( 'sl_trans_timing_check','on' );
+	echo '<label><input type="checkbox" name="sl_trans_timing_check" value="on" ' . checked( 'on', $option, false ) . ' />初回の公開時にのみスラッグを置き換える</label> ';
 }
 
 /**
@@ -413,10 +416,16 @@ add_action( 'admin_init', 'sl_trans_init_settings' );
 
 //翻訳のフィルターフック
 function sl_trans_post_data($data, $postarr,$unsanitized_postarr, $update) {
+	sl_trans_session_start();
   //オプションの読み込み
-  
   $target_array=get_option('sl_trans_type_check',[]);
   $timing_flg = get_option('sl_trans_timing_check','on');
+	$no_page = get_option('sl_trans_page','');
+	$page_arr = explode(",",$no_page);//置き換え除外のページ
+	global $ACTIVE_PAGE;
+	if(in_array($ACTIVE_PAGE, $page_arr, true)){
+		return $data;//処理せず終了
+	}
   //新規投稿フラグ
   $tr_flg=$_SESSION['newPost'];
   if(($tr_flg || $timing_flg!='on') && ($data['post_status']!='inherit' && $data['post_status']!='auto-draft')){//置き換えの判別(timingフラグがonでなく、新規投稿である。ステータスはinheritでなくauto-draftでない。)
@@ -433,11 +442,11 @@ function sl_trans_post_data($data, $postarr,$unsanitized_postarr, $update) {
   }
   return $data;
 }
-add_action( 'wp_insert_post_data', 'sl_trans_post_data', 99, 4 );
+add_action( 'wp_insert_post_data', 'sl_trans_post_data', 2, 4 );
 
 //新規投稿のフラグをセットする
 function sl_trans_change_newflg( $new_status, $old_status, $post ) {
-
+	sl_trans_session_start();
   //オプション設定の読み込み
   $timing_flg = get_option('sl_trans_timing_check','on');
 
@@ -474,6 +483,8 @@ function sl_trans_create_term($term_id,$tax_id,$tax_name,$args){
 add_action( 'create_term', 'sl_trans_create_term', 10, 4 );
 
 function sl_trans_edited_term($term_id,$tax_id,$tax_name,$args){
+	sl_trans_session_start();
+
   if($_SESSION['newPost']){//新規ならフラグをおろしてリターン
     $_SESSION['newPost']=false;
     return;
