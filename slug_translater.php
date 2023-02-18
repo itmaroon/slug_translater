@@ -31,12 +31,10 @@ define('SLTRANSLATE_SECRET', get_option('sl_trans_API_secret',''));  // API secr
 define('SLTRANSLATE_NAME',get_option('sl_trans_ID',''));  // ログインID
 
 //セッションスタートとオプションを読み込み
-function sl_trans_session_start(){
-  if(!isset($_SESSION)){
-    session_start();
-  }
+function translate_session_start(){
+  session_start();
 }
-//add_action('init', 'sl_trans_session_start');
+add_action('init', 'translate_session_start');
 
 //プラグイン用get_template_part
 function sl_trans_get_template_part($slug, $name = null) {
@@ -347,8 +345,8 @@ function sl_trans_check_func() {
 
 function sl_trans_type_func() {
   //設定済みのオプションの読み込み
-  $option_arr = get_option( 'sl_trans_type_check',[] );
-  $option_arr=sl_trans_sanitize_item_array($option_arr);
+  $option_arr = get_option( 'translate_type_check',[] );
+  $option_arr=sanitize_item_array($option_arr);
   //設定された投稿タイプの読み込み
   $args = array(
     'public'   => true,
@@ -368,9 +366,9 @@ function sl_trans_type_func() {
   }
 }
 
-function sl_trans_tax_func() {
-  $option_arr = get_option( 'sl_trans_tax_check',[] );
-  $option_arr=sl_trans_sanitize_item_array($option_arr);
+function translate_tax_func() {
+  $option_arr = get_option( 'translate_tax_check',[] );
+  $option_arr=sanitize_item_array($option_arr);
   //設定された投稿タイプの読み込み
   $args = array(
     'public'   => true,
@@ -398,8 +396,7 @@ function sl_trans_sanitize_item_array( $args ){
 add_action( 'admin_init', 'sl_trans_init_settings' );
 
 //翻訳のフィルターフック
-function sl_trans_post_data($data, $postarr,$unsanitized_postarr, $update) {
-	sl_trans_session_start();
+function translate_post_data($data, $postarr,$unsanitized_postarr, $update) {
   //オプションの読み込み
   
   $target_array=get_option('sl_trans_type_check',[]);
@@ -424,8 +421,8 @@ function sl_trans_post_data($data, $postarr,$unsanitized_postarr, $update) {
 add_action( 'wp_insert_post_data', 'sl_trans_post_data', 99, 4 );
 
 //新規投稿のフラグをセットする
-function sl_trans_change_newflg( $new_status, $old_status, $post ) {
-	sl_trans_session_start();
+function translate_change_newflg( $new_status, $old_status, $post ) {
+
   //オプション設定の読み込み
   $timing_flg = get_option('sl_trans_timing_check','on');
 
@@ -459,13 +456,11 @@ function sl_trans_create_term($term_id,$tax_id,$tax_name,$args){
     }
   }
 }
-add_action( 'create_term', 'sl_trans_create_term', 10, 4 );
+add_action( 'create_term', 'translate_create_term', 10, 4 );
 
-function sl_trans_edited_term($term_id,$tax_id,$tax_name,$args){
-	sl_trans_session_start();
-	
-  if($_SESSION['sl_trans_newPost']){//新規ならフラグをおろしてリターン
-    $_SESSION['sl_trans_newPost']=false;
+function translate_edited_term($term_id,$tax_id,$tax_name,$args){
+  if($_SESSION['newPost']){//新規ならフラグをおろしてリターン
+    $_SESSION['newPost']=false;
     return;
   }
   //オプションの読込
