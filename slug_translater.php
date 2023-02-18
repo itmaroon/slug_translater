@@ -36,7 +36,7 @@ function sl_trans_session_start(){
     session_start();
   }
 }
-//add_action('init', 'sl_trans_session_start');
+add_action('init', 'sl_trans_session_start');
 
 //プラグイン用get_template_part
 function sl_trans_get_template_part($slug, $name = null) {
@@ -463,7 +463,7 @@ function sl_trans_create_term($term_id,$tax_id,$tax_name,$args){
     }
   }
 }
-add_action( 'create_term', 'sl_trans_create_term', 10, 4 );
+add_action( 'create_term', 'translate_create_term', 10, 4 );
 
 function sl_trans_edited_term($term_id,$tax_id,$tax_name,$args){
 	sl_trans_session_start();
