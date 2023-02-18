@@ -19,9 +19,12 @@ Translate the slug generated in Japanese into English and replace it with an app
 
 * English translation function
  * This plugin uses the API of "Minna no Jido Honyaku".
- * Please register as a user of "Minna no Jido Honyaku" in advance and obtain the authentication information.
+ * Please register as a user of [Minna no Jido Honyaku](https://mt-auto-minhon-mlt.ucri.jgn-x.jp/) in advance and obtain the authentication information.
  * You can register the authentication information from the setting screen.
 
+== Related Links ==
+
+* [Github](https://github.com/itmaroon/slug_translater)
 
 == Installation ==
 
@@ -41,7 +44,9 @@ OR…
 
 == Frequently asked questions ==
 
+= What do I need to use this plugin? =
 
+Must be in accordance with [Minna no Jidou Honyaku Terms of Use] (https://mt-auto-minhon-mlt.ucri.jgn-x.jp/content/policy/).
 
 == Screenshots ==
 

@@ -36,7 +36,7 @@ function sl_trans_session_start(){
     session_start();
   }
 }
-add_action('init', 'sl_trans_session_start');
+//add_action('init', 'sl_trans_session_start');
 
 //プラグイン用get_template_part
 function sl_trans_get_template_part($slug, $name = null) {
@@ -348,7 +348,7 @@ function sl_trans_check_func() {
 function sl_trans_type_func() {
   //設定済みのオプションの読み込み
   $option_arr = get_option( 'sl_trans_type_check',[] );
-  $option_arr=sanitize_item_array($option_arr);
+  $option_arr=sl_trans_sanitize_item_array($option_arr);
   //設定された投稿タイプの読み込み
   $args = array(
     'public'   => true,
@@ -370,7 +370,7 @@ function sl_trans_type_func() {
 
 function sl_trans_tax_func() {
   $option_arr = get_option( 'sl_trans_tax_check',[] );
-  $option_arr=sanitize_item_array($option_arr);
+  $option_arr=sl_trans_sanitize_item_array($option_arr);
   //設定された投稿タイプの読み込み
   $args = array(
     'public'   => true,
@@ -389,7 +389,7 @@ function sl_trans_tax_func() {
 }
 
 // サニタイズ（チェックボックスの配列用）
-function sanitize_item_array( $args ){
+function sl_trans_sanitize_item_array( $args ){
   $args = isset( $args ) ? (array) $args : [];
   $args = array_map('esc_attr', $args);
   return $args;
@@ -399,12 +399,17 @@ add_action( 'admin_init', 'sl_trans_init_settings' );
 
 //翻訳のフィルターフック
 function sl_trans_post_data($data, $postarr,$unsanitized_postarr, $update) {
+	sl_trans_session_start();
   //オプションの読み込み
   
   $target_array=get_option('sl_trans_type_check',[]);
   $timing_flg = get_option('sl_trans_timing_check','on');
   //新規投稿フラグ
-  $tr_flg=$_SESSION['newPost'];
+  $tr_flg=$_SESSION['sl_trans_newPost'];
+	if(gettype($tr_flg)!='boolean'){//$_SESSIONデータのサニタイズ（boolean型であることを保証）
+		$_SESSION['sl_trans_newPost']=false;
+		$tr_flg=false;
+	}
   if(($tr_flg || $timing_flg!='on') && ($data['post_status']!='inherit' && $data['post_status']!='auto-draft')){//置き換えの判別(timingフラグがonでなく、新規投稿である。ステータスはinheritでなくauto-draftでない。)
     if(in_array($data['post_type'] , $target_array , true)){//指定された投稿タイプか
       // Change post name
@@ -423,24 +428,25 @@ add_action( 'wp_insert_post_data', 'sl_trans_post_data', 99, 4 );
 
 //新規投稿のフラグをセットする
 function sl_trans_change_newflg( $new_status, $old_status, $post ) {
-
+	sl_trans_session_start();
   //オプション設定の読み込み
   $timing_flg = get_option('sl_trans_timing_check','on');
 
   if($old_status=='new' && $new_status!='inherit'){//inheritは置き換えない
-    $_SESSION['newPost'] = true;
+    $_SESSION['sl_trans_newPost'] = true;
   }
 
   if($timing_flg=='on'){
     if(($old_status=='auto-draft' ||$old_status=='draft') && $new_status=='publish'){
       //下書きから公開される時にオフ
-      $_SESSION['newPost'] = false;
+      $_SESSION['sl_trans_newPost'] = false;
     }
   }
 }
 add_action( 'transition_post_status', 'sl_trans_change_newflg', 10, 3 );
 
 function sl_trans_create_term($term_id,$tax_id,$tax_name,$args){
+	sl_trans_session_start();
   //オプションの読込
   $tax_array = get_option('sl_trans_tax_check',[]);
 
@@ -450,7 +456,7 @@ function sl_trans_create_term($term_id,$tax_id,$tax_name,$args){
       $ret_name=$ret_data['resultset']['result']['text'];
       $sanitize_data=sanitize_title_with_dashes( $ret_name );//サニタイズする
 
-      $_SESSION['newPost']=true;//新規フラグを立てる
+      $_SESSION['sl_trans_newPost']=true;//新規フラグを立てる
       wp_update_term( $term_id, $tax_name, array(
         'slug' => $sanitize_data
       ));
@@ -460,8 +466,14 @@ function sl_trans_create_term($term_id,$tax_id,$tax_name,$args){
 add_action( 'create_term', 'sl_trans_create_term', 10, 4 );
 
 function sl_trans_edited_term($term_id,$tax_id,$tax_name,$args){
-  if($_SESSION['newPost']){//新規ならフラグをおろしてリターン
-    $_SESSION['newPost']=false;
+	sl_trans_session_start();
+	$tr_flg=$_SESSION['sl_trans_newPost'];
+	if(gettype($tr_flg)!='boolean'){//$_SESSIONデータのサニタイズ（boolean型であることを保証）
+		$_SESSION['sl_trans_newPost']=false;
+		$tr_flg=false;
+	}
+  if($tr_flg){//新規ならフラグをおろしてリターン
+    $_SESSION['sl_trans_newPost']=false;
     return;
   }
   //オプションの読込
@@ -472,7 +484,7 @@ function sl_trans_edited_term($term_id,$tax_id,$tax_name,$args){
     if(is_array($ret_data)){//翻訳が成功したら
       $ret_name=$ret_data['resultset']['result']['text'];
       $sanitize_data=sanitize_title_with_dashes( $ret_name );//サニタイズする
-      $_SESSION['newPost']=true;//新規フラグを立てる
+      $_SESSION['sl_trans_newPost']=true;//新規フラグを立てる
       wp_update_term( $term_id, $tax_name, array(
         'slug' => $sanitize_data
       ) );
@@ -533,6 +545,3 @@ function sl_trans_exec_translate($ja_text){
 
   }
 }
-
-
-
