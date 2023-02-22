@@ -313,7 +313,7 @@ function sl_trans_permalink_section_func() {
   global $LINK_FORMAT;
   preg_match('/\%postname\%/', $LINK_FORMAT, $m);
   if(isset($m[0])){
-    echo '<p class="permalink_caution">パーマリンク設定は「'.esc_html($LINK_FORMAT).'」です。<br>%postname%の部分が英訳されて置き換わります。</p>';
+    echo '<p class="permalink_caution">パーマリンク設定は「'.esc_html($LINK_FORMAT).'」となっています。<br>%postname%の部分が英訳されて置き換わります。</p>';
   }else{
     echo '<p class="permalink_caution"><strong>パーマリンク設定に%postname%が含まれていません。</strong><br>英訳に置き換えるには%postname%が含まれる設定にしてください。パーマリンク設定は<a href="'.esc_url(home_url()).'/wp-admin/options-permalink.php">こちら</a></p>';
   }
@@ -405,11 +405,8 @@ function sl_trans_post_data($data, $postarr,$unsanitized_postarr, $update) {
   $target_array=get_option('sl_trans_type_check',[]);
   $timing_flg = get_option('sl_trans_timing_check','on');
   //新規投稿フラグ
-  $tr_flg=$_SESSION['sl_trans_newPost'];
-	if(gettype($tr_flg)!='boolean'){//$_SESSIONデータのサニタイズ（boolean型であることを保証）
-		$_SESSION['sl_trans_newPost']=false;
-		$tr_flg=false;
-	}
+  $tr_flg=filter_var($_SESSION['sl_trans_newPost'],FILTER_VALIDATE_BOOLEAN);
+
   if(($tr_flg || $timing_flg!='on') && ($data['post_status']!='inherit' && $data['post_status']!='auto-draft')){//置き換えの判別(timingフラグがonでなく、新規投稿である。ステータスはinheritでなくauto-draftでない。)
     if(in_array($data['post_type'] , $target_array , true)){//指定された投稿タイプか
       // Change post name
@@ -467,11 +464,9 @@ add_action( 'create_term', 'sl_trans_create_term', 10, 4 );
 
 function sl_trans_edited_term($term_id,$tax_id,$tax_name,$args){
 	sl_trans_session_start();
-	$tr_flg=$_SESSION['sl_trans_newPost'];
-	if(gettype($tr_flg)!='boolean'){//$_SESSIONデータのサニタイズ（boolean型であることを保証）
-		$_SESSION['sl_trans_newPost']=false;
-		$tr_flg=false;
-	}
+
+	$tr_flg=filter_var($_SESSION['sl_trans_newPost'],FILTER_VALIDATE_BOOLEAN);
+
   if($tr_flg){//新規ならフラグをおろしてリターン
     $_SESSION['sl_trans_newPost']=false;
     return;
