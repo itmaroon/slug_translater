@@ -34,6 +34,8 @@ define('SLTRANSLATE_NAME',get_option('sl_trans_ID',''));  // ログインID
 function sl_trans_session_start(){
   if(!isset($_SESSION)){
     session_start();
+		//カウンターのセット
+		
   }
 }
 //add_action('init', 'sl_trans_session_start');
