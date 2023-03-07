@@ -538,15 +538,7 @@ function sl_trans_exec_translate($ja_text){
     $response = $provider->getResponse($request);
     $data = $response->getBody()->getContents();
     $json=json_decode($data,true);
-		//カウンターのセット
-		if(get_option('sl_count_date','')!=date('Y-m-d')){
-			update_option('sl_count_date',date('Y-m-d'));
-			update_option('sl_counter', 1);
-		}else{
-			$count=get_option('sl_counter',0);
-			$count++;
-			update_option('sl_counter', $count);
-		}
+		
     return $json;
   } catch (\League\OAuth2\Client\Provider\Exception\IdentityProviderException $e) {
 
