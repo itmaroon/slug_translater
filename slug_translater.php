@@ -33,9 +33,21 @@ define('SLTRANSLATE_NAME',get_option('sl_trans_ID',''));  // ログインID
 //セッションスタートとオプションを読み込み
 function sl_trans_session_start(){
   if(!isset($_SESSION)){
+		ini_set( 'session.gc_maxlifetime', 86400 );//セッションの持続時間を１日に
+		ini_set( 'session.cookie_lifetime', 86400 );//クッキーの持続時間も１日に
     session_start();
+		//フラグのセット
+		if(!isset($_SESSION['sl_trans_newPost'])){
+			$_SESSION['sl_trans_newPost'] = false;
+		}
 		//カウンターのセット
-		
+		if(!isset($_SESSION['count_date'])){
+			$_SESSION['count_date'] = date('Y-m-d');
+		}
+		if($_SESSION['count_date']!=date('Y-m-d')){
+			$_SESSION['count_date'] = date('Y-m-d');
+			$_SESSION['trans_counter']=0;
+		}
   }
 }
 //add_action('init', 'sl_trans_session_start');
@@ -493,6 +505,7 @@ add_action( 'edited_term', 'sl_trans_edited_term', 10, 4 );
 
 //翻訳の実行
 function sl_trans_exec_translate($ja_text){
+	sl_trans_session_start();
   $api_name  = 'mt';  // API名 (https://xxx.jp/api/mt/generalNT_ja_en/ の場合は、"mt")
   $api_param = 'generalNT_ja_en';  // API値 (https://xxx.jp/api/mt/generalNT_ja_en/ の場合は、"generalNT_ja_en")
 
@@ -533,6 +546,8 @@ function sl_trans_exec_translate($ja_text){
     $response = $provider->getResponse($request);
     $data = $response->getBody()->getContents();
     $json=json_decode($data,true);
+		//カウンターのセット
+		$_SESSION['trans_counter']++;
     return $json;
   } catch (\League\OAuth2\Client\Provider\Exception\IdentityProviderException $e) {
 
