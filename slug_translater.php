@@ -33,20 +33,10 @@ define('SLTRANSLATE_NAME',get_option('sl_trans_ID',''));  // ログインID
 //セッションスタートとオプションを読み込み
 function sl_trans_session_start(){
   if(!isset($_SESSION)){
-		ini_set( 'session.gc_maxlifetime', 86400 );//セッションの持続時間を１日に
-		ini_set( 'session.cookie_lifetime', 86400 );//クッキーの持続時間も１日に
     session_start();
 		//フラグのセット
 		if(!isset($_SESSION['sl_trans_newPost'])){
 			$_SESSION['sl_trans_newPost'] = false;
-		}
-		//カウンターのセット
-		if(!isset($_SESSION['count_date'])){
-			$_SESSION['count_date'] = date('Y-m-d');
-		}
-		if($_SESSION['count_date']!=date('Y-m-d')){
-			$_SESSION['count_date'] = date('Y-m-d');
-			$_SESSION['trans_counter']=0;
 		}
   }
 }
@@ -179,11 +169,12 @@ function sl_trans_menu_page() {
   if ( ! current_user_can( 'manage_options' ) ) {
     wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
   }
-  
+
+	echo '<h2>'.get_option('sl_count_date','').'のアクセス数は '.get_option('sl_counter',0).' 回です<br>';
   ?>
   <div class="wrap">
     <h1>SLUG TRANSLATER の設定</h1>
-
+		
     <form method="POST" action="options.php">
       <?php 
       settings_fields( 'sl_trans_setting_group' ); // ページのスラッグ.
@@ -318,6 +309,7 @@ function sl_trans_init_settings() {
  * セクションの説明文を表示するための関数
  */
 function sl_trans_authorize_section_func() {
+	
   echo '<p class="authorize_caution">「みんなの翻訳」のユーザー登録は<a href="https://mt-auto-minhon-mlt.ucri.jgn-x.jp/" target="_blank">こちら</a><br>（ユーザー登録が済んでいる方は認証情報を入力してください。</p>';
 }
 function sl_trans_timing_section_func() {
@@ -547,7 +539,14 @@ function sl_trans_exec_translate($ja_text){
     $data = $response->getBody()->getContents();
     $json=json_decode($data,true);
 		//カウンターのセット
-		$_SESSION['trans_counter']++;
+		if(get_option('sl_count_date','')!=date('Y-m-d')){
+			update_option('sl_count_date',date('Y-m-d'));
+			update_option('sl_counter', 1);
+		}else{
+			$count=get_option('sl_counter',0);
+			$count++;
+			update_option('sl_counter', $count);
+		}
     return $json;
   } catch (\League\OAuth2\Client\Provider\Exception\IdentityProviderException $e) {
 
