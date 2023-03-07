@@ -2,7 +2,7 @@
 /*
 Plugin Name: SLUG TRANSLATER
 Description: 日本語の投稿記事やカテゴリなどのslugを英訳して最適な形式に置き換えます。
-Version: 1.0.0
+Version: 1.0.2
 Author:WebクリエイターItmaroon
 Author URI:https://itmaroon.net
 */
@@ -31,10 +31,12 @@ define('SLTRANSLATE_SECRET', get_option('sl_trans_API_secret',''));  // API secr
 define('SLTRANSLATE_NAME',get_option('sl_trans_ID',''));  // ログインID
 
 //セッションスタートとオプションを読み込み
-function translate_session_start(){
-  session_start();
+function sl_trans_session_start(){
+  if(!isset($_SESSION)){
+    session_start();
+  }
 }
-add_action('init', 'translate_session_start');
+//add_action('init', 'sl_trans_session_start');
 
 //プラグイン用get_template_part
 function sl_trans_get_template_part($slug, $name = null) {
@@ -311,7 +313,7 @@ function sl_trans_permalink_section_func() {
   global $LINK_FORMAT;
   preg_match('/\%postname\%/', $LINK_FORMAT, $m);
   if(isset($m[0])){
-    echo '<p class="permalink_caution">パーマリンク設定は「'.esc_html($LINK_FORMAT).'」です。<br>%postname%の部分が英訳されて置き換わります。</p>';
+    echo '<p class="permalink_caution">パーマリンク設定は「'.esc_html($LINK_FORMAT).'」となっています。<br>%postname%の部分が英訳されて置き換わります。</p>';
   }else{
     echo '<p class="permalink_caution"><strong>パーマリンク設定に%postname%が含まれていません。</strong><br>英訳に置き換えるには%postname%が含まれる設定にしてください。パーマリンク設定は<a href="'.esc_url(home_url()).'/wp-admin/options-permalink.php">こちら</a></p>';
   }
@@ -335,7 +337,7 @@ function sl_trans_text_func($input_arr) {
 function sl_trans_check_func() {
   $option = get_option( 'sl_trans_timing_check','on' );
   
-  echo '<label><input type="checkbox" name="sl_trans_timing_check" value="on" ' . checked( 'on', $option, false ) . ' />初回の公開時にのみスラッグを置き換える</label> ';
+  echo '<label><input type="checkbox" name="sl_trans_timing_check" value="on" ' . checked( 'on', $option, false ) . ' />初回の保存時にのみスラッグを置き換える</label> ';
   
 }
 
@@ -345,8 +347,8 @@ function sl_trans_check_func() {
 
 function sl_trans_type_func() {
   //設定済みのオプションの読み込み
-  $option_arr = get_option( 'translate_type_check',[] );
-  $option_arr=sanitize_item_array($option_arr);
+  $option_arr = get_option( 'sl_trans_type_check',[] );
+  $option_arr=sl_trans_sanitize_item_array($option_arr);
   //設定された投稿タイプの読み込み
   $args = array(
     'public'   => true,
@@ -366,9 +368,9 @@ function sl_trans_type_func() {
   }
 }
 
-function translate_tax_func() {
-  $option_arr = get_option( 'translate_tax_check',[] );
-  $option_arr=sanitize_item_array($option_arr);
+function sl_trans_tax_func() {
+  $option_arr = get_option( 'sl_trans_tax_check',[] );
+  $option_arr=sl_trans_sanitize_item_array($option_arr);
   //設定された投稿タイプの読み込み
   $args = array(
     'public'   => true,
@@ -396,14 +398,15 @@ function sl_trans_sanitize_item_array( $args ){
 add_action( 'admin_init', 'sl_trans_init_settings' );
 
 //翻訳のフィルターフック
-function translate_post_data($data, $postarr,$unsanitized_postarr, $update) {
+function sl_trans_post_data($data, $postarr,$unsanitized_postarr, $update) {
+	sl_trans_session_start();
   //オプションの読み込み
   
   $target_array=get_option('sl_trans_type_check',[]);
   $timing_flg = get_option('sl_trans_timing_check','on');
   //新規投稿フラグ
-  $tr_flg=$_SESSION['sl_trans_newPost'];
-	
+  $tr_flg=filter_var($_SESSION['sl_trans_newPost'],FILTER_VALIDATE_BOOLEAN);
+
   if(($tr_flg || $timing_flg!='on') && ($data['post_status']!='inherit' && $data['post_status']!='auto-draft')){//置き換えの判別(timingフラグがonでなく、新規投稿である。ステータスはinheritでなくauto-draftでない。)
     if(in_array($data['post_type'] , $target_array , true)){//指定された投稿タイプか
       // Change post name
@@ -421,17 +424,17 @@ function translate_post_data($data, $postarr,$unsanitized_postarr, $update) {
 add_action( 'wp_insert_post_data', 'sl_trans_post_data', 99, 4 );
 
 //新規投稿のフラグをセットする
-function translate_change_newflg( $new_status, $old_status, $post ) {
-
+function sl_trans_change_newflg( $new_status, $old_status, $post ) {
+	sl_trans_session_start();
   //オプション設定の読み込み
   $timing_flg = get_option('sl_trans_timing_check','on');
 
-  if($old_status=='new' && $new_status!='inherit'){//inheritは置き換えない
+  if($old_status=='new' && $new_status=='auto-draft'){//inheritは置き換えない
     $_SESSION['sl_trans_newPost'] = true;
   }
 
   if($timing_flg=='on'){
-    if(($old_status=='auto-draft' ||$old_status=='draft') && $new_status=='publish'){
+    if($new_status=='draft' || $new_status=='publish' || $new_status=='private' || $new_status=='pending'){
       //下書きから公開される時にオフ
       $_SESSION['sl_trans_newPost'] = false;
     }
@@ -440,6 +443,7 @@ function translate_change_newflg( $new_status, $old_status, $post ) {
 add_action( 'transition_post_status', 'sl_trans_change_newflg', 10, 3 );
 
 function sl_trans_create_term($term_id,$tax_id,$tax_name,$args){
+	sl_trans_session_start();
   //オプションの読込
   $tax_array = get_option('sl_trans_tax_check',[]);
 
@@ -456,11 +460,15 @@ function sl_trans_create_term($term_id,$tax_id,$tax_name,$args){
     }
   }
 }
-add_action( 'create_term', 'translate_create_term', 10, 4 );
+add_action( 'create_term', 'sl_trans_create_term', 10, 4 );
 
-function translate_edited_term($term_id,$tax_id,$tax_name,$args){
-  if($_SESSION['newPost']){//新規ならフラグをおろしてリターン
-    $_SESSION['newPost']=false;
+function sl_trans_edited_term($term_id,$tax_id,$tax_name,$args){
+	sl_trans_session_start();
+
+	$tr_flg=filter_var($_SESSION['sl_trans_newPost'],FILTER_VALIDATE_BOOLEAN);
+
+  if($tr_flg){//新規ならフラグをおろしてリターン
+    $_SESSION['sl_trans_newPost']=false;
     return;
   }
   //オプションの読込
@@ -532,6 +540,3 @@ function sl_trans_exec_translate($ja_text){
 
   }
 }
-
-
-
