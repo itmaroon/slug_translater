@@ -25,7 +25,7 @@ $LINK_FORMAT=get_option('permalink_structure');
 
 //新規投稿フラグ
 $NEW_POST_FLG=false;
-define('SLTRANSLATE_URL','https://mt-auto-minhon-mlt.ucri.jgn-x.jp');  // 基底URL (https://xxx.jpまでを入力)
+define('SLTRANSLATE_URL','https://localization.linuxfoundation.jp');  // 基底URL (https://xxx.jpまでを入力)
 define('SLTRANSLATE_KEY', get_option('sl_trans_API_key',''));  // API key
 define('SLTRANSLATE_SECRET', get_option('sl_trans_API_secret',''));  // API secret
 define('SLTRANSLATE_NAME',get_option('sl_trans_ID',''));  // ログインID
