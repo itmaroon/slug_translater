@@ -1,0 +1,48 @@
+.wrap .timing_caution strong {
+  color: red;
+}
+.wrap .authorize_caution + table th, .wrap .type_caution + table th {
+  width: 100px;
+}
+.wrap .timing_caution + table th {
+  display: none;
+}
+.wrap .permalink_caution strong {
+  color: red;
+}
+.wrap .type_caution + table td label:not(:first-child) {
+  margin-left: 20px;
+}
+.wrap .authorize_caution + table th {
+  display: none;
+}
+.wrap .regist {
+  display: none;
+}
+.wrap .regist p strong {
+  color: red;
+}
+.wrap .regist table th {
+  display: block;
+}
+
+#api_check {
+  position: relative;
+}
+#api_check:hover {
+  cursor: pointer;
+}
+#api_check.checking {
+  padding-right: 3rem;
+}
+#api_check.checking::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 0.5rem;
+  width: 1.5rem;
+  height: 1.5rem;
+  background: transparent url("../img/transloading.gif") no-repeat center center/cover;
+}
+/*# sourceMappingURL=translater.css.map */

@@ -1,0 +1,6 @@
+{
+    "require": {
+        "league/oauth2-client": "^2.6",
+        "google/cloud-translate": "^1.13"
+    }
+}
