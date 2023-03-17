@@ -269,14 +269,6 @@ function sl_trans_init_settings() {
     ]
   );
 
-	add_filter( "pre_update_option_sl_trans_engine"
-	, function( $value, $old_value, $option){
-
-
-		add_settings_error($option, $option, 'アルファベットのみを指定', 'error');
-		return $old_value;
-	},10,3 );
-
   register_setting(
     'sl_trans_setting_group',
     'sl_trans_ID',
