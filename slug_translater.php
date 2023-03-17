@@ -2,7 +2,7 @@
 /*
 Plugin Name: SLUG TRANSLATER
 Description: 日本語の投稿記事やカテゴリなどのslugを英訳して最適な形式に置き換えます。
-Version: 1.0.2
+Version: 1.1.3
 Author:WebクリエイターItmaroon
 Author URI:https://itmaroon.net
 */
