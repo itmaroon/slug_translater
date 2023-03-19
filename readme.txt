@@ -3,7 +3,7 @@ Contributors: itmaroon
 Tags: slug, translate, custom,permalink,post,category,tags,japanese, english
 Requires at least: 6.1
 Tested up to: 6.1
-Stable tag: 1.1.3
+Stable tag: 1.1.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Requires PHP: 7.4
@@ -65,6 +65,9 @@ Changed when to translate and replace permalinks from first publish to first sav
 = 1.1.3 =
 Added a function to select Google Cloud Translation API for translation API
 Eliminated error caused by calling before session variable is initialized.
+= 1.1.4 =
+Deleted the options recorded in the database when uninstalling the plugin.
+Fixed a bug that an error was not displayed properly when an error was detected in the authentication check on the management screen of Google Cloud Translation API.
 
 == Upgrade notice ==
 

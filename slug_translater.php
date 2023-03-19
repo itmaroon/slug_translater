@@ -2,7 +2,7 @@
 /*
 Plugin Name: SLUG TRANSLATER
 Description: 日本語の投稿記事やカテゴリなどのslugを英訳して最適な形式に置き換えます。
-Version: 1.1.3
+Version: 1.1.4
 Author:WebクリエイターItmaroon
 Author URI:https://itmaroon.net
 */
@@ -149,16 +149,18 @@ function sl_trans_activate(){
 }
 register_activation_hook( __FILE__, 'sl_trans_activate' );
 
-//プラグイン無効化時にオプションキーを削除
-function sl_trans_deactivate(){
-  // delete_option('sl_trans_ID');
-  // delete_option('sl_trans_API_key');
-  // delete_option('sl_trans_API_secret');
-  // delete_option('sl_trans_timing_check');
-  // delete_option('sl_trans_type_check');
-  // delete_option('sl_trans_tax_check');
+//プラグインアンインストールにオプションキーを削除
+function sl_trans_uninstall(){
+  delete_option('sl_trans_ID');
+  delete_option('sl_trans_API_key');
+  delete_option('sl_trans_API_secret');
+  delete_option('sl_trans_timing_check');
+  delete_option('sl_trans_type_check');
+  delete_option('sl_trans_tax_check');
+	delete_option('sl_trans_google_prid');
+	delete_option('sl_trans_google_apikey');
 }
-register_deactivation_hook( __FILE__, 'sl_trans_deactivate' );
+register_uninstall_hook( __FILE__, 'sl_trans_uninstall' );
 
 
 /**
@@ -768,5 +770,6 @@ function sl_trans_exec_google($ja_text, $prid=null, $api_key=null){
 	catch(\Exception $e){
 		$ret_json=json_decode($e->getMessage());
 		$ret_data=array('code'=>$ret_json->error->code,'text'=>__($ret_json->error->message));
+		return $ret_data;
 	}
 }
