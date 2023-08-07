@@ -2,9 +2,13 @@
 /*
 Plugin Name: SLUG TRANSLATER
 Description: 日本語の投稿記事やカテゴリなどのslugを英訳して最適な形式に置き換えます。
-Version: 1.1.4
+Version: 1.2.0
 Author:WebクリエイターItmaroon
 Author URI:https://itmaroon.net
+License:      GPL v2 or later
+License URI:  https://www.gnu.org/licenses/gpl-2.0.html
+Text Domain:  sl_trans-text-domain
+Domain Path:  /languages
 */
 
 if ( ! defined( 'ABSPATH' ) ) exit;
@@ -50,6 +54,12 @@ function sl_trans_session_start(){
   }
 }
 //add_action('init', 'sl_trans_session_start');
+
+//翻訳ファイルの読み込み
+function sl_trans_load_textdomain() {
+  load_plugin_textdomain( 'sl_trans-text-domain', false, basename( dirname( __FILE__ ) ) . '/languages' );
+}
+add_action( 'init', 'sl_trans_load_textdomain' );
 
 //プラグイン用get_template_part
 function sl_trans_get_template_part($slug, $name = null) {
@@ -110,8 +120,9 @@ function sl_trans_page_slug(){
 }
 
 //CSS等の読込
-function sl_trans_script_init(){  
-	wp_enqueue_style('mytrans', SLTRANSLATE_PLUGIN_URL . 'css/translater.css?'.date('YmdHis'), array(), '1.0.0', 'all');
+function sl_trans_script_init(){
+  $css_path = plugin_dir_path(__FILE__) . 'css/translater.css';  
+	wp_enqueue_style('mytrans', SLTRANSLATE_PLUGIN_URL . 'css/translater.css', array(), filemtime($css_path), 'all');
 }
 add_action('admin_enqueue_scripts', 'sl_trans_script_init');
 
@@ -168,7 +179,7 @@ register_uninstall_hook( __FILE__, 'sl_trans_uninstall' );
  */
 function sl_trans_add_admin_menu() {
   add_options_page(
-    'SLUG TRANSLATER設定ページ', // 設定画面のページタイトル.
+    __('SLUG TRANSLATER setting page', 'sl_trans-text-domain'), // 設定画面のページタイトル.
     'SLUG TRANSLATER', // 管理画面メニューに表示される名前.
     'manage_options',
     'sl_trans_menu', // メニューのスラッグ.
@@ -179,12 +190,12 @@ function sl_trans_add_admin_menu() {
 function sl_trans_menu_page() {
   // 権限チェック.
   if ( ! current_user_can( 'manage_options' ) ) {
-    wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
+    wp_die( _e( 'You do not have sufficient permissions to access this page.' ,'sl_trans-text-domain') );
   }
   
   ?>
   <div class="wrap">
-    <h1>SLUG TRANSLATER の設定</h1>
+    <h1><?php _e('SLUG TRANSLATER Settings','sl_trans-text-domain') ?></h1>
 
     <form method="POST" action="options.php">
       <?php 
@@ -206,25 +217,25 @@ function sl_trans_init_settings() {
   // 設定のセクション追加.
   add_settings_section(
     'sl_trans_setting-section-1',
-    '翻訳APIの選択',
+    __('Choosing a translation API', 'sl_trans-text-domain'),
     'sl_trans_authorize_section_func', // セクションの説明文を表示するための関数.
     'sl_trans_setting'
   );
   add_settings_section(
     'sl_trans_setting-section-2',
-    'スラッグを英訳に置き換えるタイミング',
+    __('When to replace slugs with English translations', 'sl_trans-text-domain'),
     'sl_trans_timing_section_func',
     'sl_trans_setting'
   );
   add_settings_section(
     'sl_trans_setting-section-3',
-    'パーマリンクの設定',
+    __('Permalink settings', 'sl_trans-text-domain'),
     'sl_trans_permalink_section_func',
     'sl_trans_setting'
   );
   add_settings_section(
     'sl_trans_setting-section-4',
-    'スラッグを置き換える投稿タイプ・タクソノミ',
+    __('Post type taxonomy to replace slug', 'sl_trans-text-domain'),
     'sl_trans_type_section_func',
     'sl_trans_setting'
   );
@@ -246,7 +257,7 @@ function sl_trans_init_settings() {
   );
   add_settings_field(
     'sl_trans_type', // 設定名.
-    '投稿タイプ', // 設定タイトル.
+    __('Post Type', 'sl_trans-text-domain'), // 設定タイトル.
     'sl_trans_type_func', // 設定項目のHTMLを出力する関数名.
     'sl_trans_setting', // メニュースラッグ.
     'sl_trans_setting-section-4' // どのセクションに表示するか.
@@ -254,7 +265,7 @@ function sl_trans_init_settings() {
 
   add_settings_field(
     'sl_trans_tax', // 設定名.
-    'タクソノミ等', // 設定タイトル.
+    __('taxonomies, etc.', 'sl_trans-text-domain'), // 設定タイトル.
     'sl_trans_tax_func', // 設定項目のHTMLを出力する関数名.
     'sl_trans_setting', // メニュースラッグ.
     'sl_trans_setting-section-4' // どのセクションに表示するか.
@@ -325,35 +336,35 @@ function sl_trans_init_settings() {
  * セクションの説明文を表示するための関数
  */
 function sl_trans_authorize_section_func() {
-  echo '<p class="authorize_caution">翻訳APIを選択してください。</p>';
+  echo '<p class="authorize_caution">'.__('Choose a translation API.', 'sl_trans-text-domain').'</p>';
 }
 function sl_trans_timing_section_func() {
-  echo '<p class="timing_caution">このチェックを外すと<strong>手動でのスラッグ名変更ができなくなります。</strong><br>常に自動的にスラッグ名を置き換えたい場合のみチェックを外して下さい。</p>';
+  echo '<p class="timing_caution">'.__('Unchecking this,', 'sl_trans-text-domain').'<strong>'.__('Disable manual slug renaming.', 'sl_trans-text-domain').'</strong><br>'.__('Uncheck it only if you always want to automatically replace the slug name.', 'sl_trans-text-domain').'</p>';
 }
 function sl_trans_permalink_section_func() {
   global $LINK_FORMAT;
   preg_match('/\%postname\%/', $LINK_FORMAT, $m);
   if(isset($m[0])){
-    echo '<p class="permalink_caution">パーマリンク設定は「'.esc_html($LINK_FORMAT).'」となっています。<br>%postname%の部分が英訳されて置き換わります。</p>';
+    echo '<p class="permalink_caution">'.__('The permalink setting is "', 'sl_trans-text-domain').esc_html($LINK_FORMAT).__('”.', 'sl_trans-text-domain').'<br>'.__('The part of %postname% is translated into English and replaced.', 'sl_trans-text-domain').'</p>';
   }else{
-    echo '<p class="permalink_caution"><strong>パーマリンク設定に%postname%が含まれていません。</strong><br>英訳に置き換えるには%postname%が含まれる設定にしてください。パーマリンク設定は<a href="'.esc_url(home_url()).'/wp-admin/options-permalink.php">こちら</a></p>';
+    echo '<p class="permalink_caution"><strong>'.__('Your permalink settings do not contain %postname%.', 'sl_trans-text-domain').'</strong><br>'.__('Please set it to include %postname% to replace with English translation. permalink settings', 'sl_trans-text-domain').'<a href="'.esc_url(home_url()).'/wp-admin/options-permalink.php">'.__('here', 'sl_trans-text-domain').'</a></p>';
   }
 }
 
 function sl_trans_select_func() {
 	?>
   <select name="sl_trans_engine">
-		<option value="">--翻訳APIを選択してください--</option>
-    <option value="minna">みんなの自動翻訳</option>
+		<option value=""><?php _e('--Choose a translation API--', 'sl_trans-text-domain') ?></option>
+    <option value="minna"><?php _e('Minna no Jido Honyaku', 'sl_trans-text-domain')?></option>
     <option value="google">Google Cloud Translation</option>
 	</select>
-	<button type="button" id="api_check">認証チェック</button>
+	<button type="button" id="api_check"><?php _e('Authentication check', 'sl_trans-text-domain')?></button>
 	<div class="minna regist">
-		<p class="regist_caution">「みんなの翻訳」のユーザー登録は<a href="https://mt-auto-minhon-mlt.ucri.jgn-x.jp/" target="_blank">
-			こちら</a><br>（ユーザー登録が済んでいる方は認証情報を入力してください。<br>「みんなの自動翻訳」は無料で使用できますが、１日のアクセス回数に制限があります。</p>
+		<p class="regist_caution"><?php _e('User registration for "Minna no Jido Honyaku"', 'sl_trans-text-domain')?><a href="https://mt-auto-minhon-mlt.ucri.jgn-x.jp/" target="_blank">
+			<?php _e('here', 'sl_trans-text-domain')?></a><br><?php _e('If you have completed user registration, please enter your authentication information.', 'sl_trans-text-domain')?><br><?php _e('"Minna no Jido Honyaku" can be used for free, but there is a limit to the number of accesses per day.', 'sl_trans-text-domain')?></p>
 		<table>
 			<tr>
-				<th>ログインID</th>
+				<th><?php _e('Login ID', 'sl_trans-text-domain')?></th>
 				<td><input type="text" name="sl_trans_ID" value="<?php form_option('sl_trans_ID'); ?>" ></td>
 			</tr>
 			<tr>
@@ -367,14 +378,14 @@ function sl_trans_select_func() {
 		</table>
 	</div><!-- /.minna -->
 	<div class="google regist">
-		<p class="regist_caution">Google Cloud Translation APIを利用するにはGoogle Cloud Platform（GCP）でプロジェクトを作成する必要があります。<br>
-		プロジェクトの作成は<a href="https://console.cloud.google.com/home/dashboard" target="_blank">
-			こちら</a><br>
-			作成したプロジェクトでCloud Translation APIを有効にして、認証情報を取得してください。<br>
-			このAPIは1カ月につき500,000文字までは無料ですが、それ以上は<strong>従量制で課金</strong>されます。</p>
+		<p class="regist_caution"><?php _e('To use the Google Cloud Translation API, you need to create a project on Google Cloud Platform (GCP).', 'sl_trans-text-domain')?><br>
+		<?php _e('Creating a project', 'sl_trans-text-domain')?><a href="https://console.cloud.google.com/home/dashboard" target="_blank">
+    <?php _e('here', 'sl_trans-text-domain')?></a><br>
+    <?php _e('Enable the Cloud Translation API in the project you created and get your credentials.', 'sl_trans-text-domain')?><br>
+    <?php _e('The API is free for up to 500,000 characters per month, beyond', 'sl_trans-text-domain')?><strong><?php _e('Billed on a pay-as-you-go basis.', 'sl_trans-text-domain')?></strong></p>
 		<table>
 			<tr>
-				<th>プロジェクトID</th>
+				<th><?php _e('Project ID', 'sl_trans-text-domain')?></th>
 				<td><input type="text" name="sl_trans_google_prid" value="<?php form_option('sl_trans_google_prid'); ?>" ></td>
 			</tr>
 			<tr>
@@ -416,7 +427,7 @@ function sl_trans_select_func() {
 						regist_arr.push($(this).val());
 					}
 				});
-				$(this).text('しばらくお待ちください');
+				$(this).text(<?php __('Please wait', 'sl_trans-text-domain')?>);
 				$(this).addClass('checking');
 				let btn=$(this);
 
@@ -432,9 +443,9 @@ function sl_trans_select_func() {
 				}).done(function(data) {
 					let ret_data=JSON.parse(data);
 					if(ret_data['code']==0){
-						alert('正常に認証されています。');
+						alert("<?php _e('Authenticated successfully.', 'sl_trans-text-domain')?>");
 					}else{
-						alert('エラーが発生しています。');
+						alert("<?php _e('An error has occurred.', 'sl_trans-text-domain')?>");
 					}
 				}).fail(function(XMLHttpRequest, textStatus, errorThrown) {
 					console.log(XMLHttpRequest.status);
@@ -442,7 +453,7 @@ function sl_trans_select_func() {
 					console.log(errorThrown.message);
 					
 				}).always(function() {
-					btn.text('認証チェック');
+					btn.text(<?php __('Authentication check', 'sl_trans-text-domain')?>);
 					btn.removeClass('checking');
 				})
 
@@ -453,7 +464,7 @@ function sl_trans_select_func() {
 }
 
 function sl_trans_type_section_func() {
-  echo '<p class="type_caution">次の投稿タイプ等のスラッグを英訳して置き換えます。</p>';
+  echo '<p class="type_caution">'. __('Translate and replace the slugs of the following post types, etc.', 'sl_trans-text-domain').'</p>';
 }
 
 //Wordpress投稿情報を取得
@@ -493,7 +504,7 @@ function sl_trans_text_func($input_arr) {
 function sl_trans_check_func() {
   $option = get_option( 'sl_trans_timing_check','on' );
   
-  echo '<label><input type="checkbox" name="sl_trans_timing_check" value="on" ' . checked( 'on', $option, false ) . ' />初回の保存時にのみスラッグを置き換える</label> ';
+  echo '<label><input type="checkbox" name="sl_trans_timing_check" value="on" ' . checked( 'on', $option, false ) . ' />'.__('Replace slug only on first save', 'sl_trans-text-domain').'</label> ';
   
 }
 

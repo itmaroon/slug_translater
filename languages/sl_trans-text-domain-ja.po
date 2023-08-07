@@ -1,0 +1,179 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: ja\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 3.3.2\n"
+
+#: slug_translater.php:176
+msgid "SLUG TRANSLATER setting page"
+msgstr "SLUG TRANSLATER設定ページ"
+
+#: slug_translater.php:187
+msgid "You do not have sufficient permissions to access this page."
+msgstr "このページにアクセスする権限がありません。"
+
+#: slug_translater.php:192
+msgid "SLUG TRANSLATER Settings"
+msgstr "SLUG TRANSLATER設定"
+
+#: slug_translater.php:214
+msgid "Choosing a translation API"
+msgstr "翻訳APIの選択"
+
+#: slug_translater.php:220
+msgid "When to replace slugs with English translations"
+msgstr "スラッグを英訳に置き換えるタイミング"
+
+#: slug_translater.php:226
+msgid "Permalink settings"
+msgstr "パーマリンクの設定"
+
+#: slug_translater.php:232
+msgid "Post type taxonomy to replace slug"
+msgstr "スラッグを置き換える投稿タイプ・タクソノミ"
+
+#: slug_translater.php:254
+msgid "Post Type"
+msgstr "投稿タイプ"
+
+#: slug_translater.php:262
+msgid "taxonomies, etc."
+msgstr "タクソノミ等."
+
+#: slug_translater.php:333
+msgid "Choose a translation API."
+msgstr "翻訳APIを選択してください。"
+
+#: slug_translater.php:336
+msgid "Unchecking this,"
+msgstr "このチェックを外すと,"
+
+#: slug_translater.php:336
+msgid "Disable manual slug renaming."
+msgstr "手動でのスラッグ名変更ができなくなります。"
+
+#: slug_translater.php:336
+msgid ""
+"Uncheck it only if you always want to automatically replace the slug name."
+msgstr "常に自動的にスラッグ名を置き換えたい場合のみチェックを外して下さい。"
+
+#: slug_translater.php:342
+msgid "The permalink setting is \""
+msgstr "パーマリンク設定は「"
+
+#: slug_translater.php:342
+msgid "”."
+msgstr "」となっています。"
+
+#: slug_translater.php:342
+msgid "The part of %postname% is translated into English and replaced."
+msgstr "%postname%の部分が英訳されて置き換わります。"
+
+#: slug_translater.php:344
+msgid "Your permalink settings do not contain %postname%."
+msgstr "パーマリンク設定に%postname%が含まれていません。"
+
+#: slug_translater.php:344
+msgid ""
+"Please set it to include %postname% to replace with English translation. "
+"permalink settings"
+msgstr ""
+"英訳に置き換えるには%postname%が含まれる設定にしてください。パーマリンク設定"
+"は"
+
+#: slug_translater.php:344 slug_translater.php:358 slug_translater.php:377
+msgid "here"
+msgstr "こちら"
+
+#: slug_translater.php:351
+msgid "--Choose a translation API--"
+msgstr "--翻訳APIを選択してください--"
+
+#: slug_translater.php:352
+msgid "Minna no Jido Honyaku"
+msgstr "みんなの自動翻訳"
+
+#: slug_translater.php:355 slug_translater.php:450
+msgid "Authentication check"
+msgstr "認証チェック"
+
+#: slug_translater.php:357
+msgid "User registration for \"Minna no Jido Honyaku\""
+msgstr "「みんなの自動翻訳」のユーザー登録は"
+
+#: slug_translater.php:358
+msgid ""
+"If you have completed user registration, please enter your authentication "
+"information."
+msgstr "ユーザー登録が済んでいる方は認証情報を入力してください。"
+
+#: slug_translater.php:358
+msgid ""
+"\"Minna no Jido Honyaku\" can be used for free, but there is a limit to the "
+"number of accesses per day."
+msgstr ""
+"「みんなの自動翻訳」は無料で使用できますが、１日のアクセス回数に制限がありま"
+"す。"
+
+#: slug_translater.php:361
+msgid "Login ID"
+msgstr "ログインID"
+
+#: slug_translater.php:375
+msgid ""
+"To use the Google Cloud Translation API, you need to create a project on "
+"Google Cloud Platform (GCP)."
+msgstr ""
+"Google Cloud Translation APIを利用するにはGoogle Cloud Platform（GCP）でプロ"
+"ジェクトを作成する必要があります。"
+
+#: slug_translater.php:376
+msgid "Creating a project"
+msgstr "プロジェクトの作成は"
+
+#: slug_translater.php:378
+msgid ""
+"Enable the Cloud Translation API in the project you created and get your "
+"credentials."
+msgstr ""
+"作成したプロジェクトでCloud Translation APIを有効にして、認証情報を取得して"
+"ください。"
+
+#: slug_translater.php:379
+msgid "The API is free for up to 500,000 characters per month, beyond"
+msgstr "このAPIは1カ月につき500,000文字までは無料ですが、それ以上は"
+
+#: slug_translater.php:379
+msgid "Billed on a pay-as-you-go basis."
+msgstr "従量制で課金されます。"
+
+#: slug_translater.php:382
+msgid "Project ID"
+msgstr "プロジェクトID"
+
+#: slug_translater.php:424
+msgid "Please wait"
+msgstr "しばらくお待ちください"
+
+#: slug_translater.php:440
+msgid "Authenticated successfully."
+msgstr "正常に認証されています。"
+
+#: slug_translater.php:442
+msgid "An error has occurred."
+msgstr "エラーが発生しています。"
+
+#: slug_translater.php:461
+msgid "Translate and replace the slugs of the following post types, etc."
+msgstr "次の投稿タイプ等のスラッグを英訳して置き換えます。"
+
+#: slug_translater.php:501
+msgid "Replace slug only on first save"
+msgstr "初回の保存時にのみスラッグを置き換える"

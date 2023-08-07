@@ -3,7 +3,7 @@ Contributors: itmaroon
 Tags: slug, translate, custom,permalink,post,category,tags,japanese, english
 Requires at least: 6.1
 Tested up to: 6.1
-Stable tag: 1.1.4
+Stable tag: 1.2.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Requires PHP: 7.4
@@ -68,6 +68,8 @@ Eliminated error caused by calling before session variable is initialized.
 = 1.1.4 =
 Deleted the options recorded in the database when uninstalling the plugin.
 Fixed a bug that an error was not displayed properly when an error was detected in the authentication check on the management screen of Google Cloud Translation API.
+= 1.2.0 =
+Made it multilingual. Currently, English and Japanese can be displayed on the management screen.
 
 == Upgrade notice ==
 
