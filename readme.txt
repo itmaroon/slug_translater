@@ -58,18 +58,22 @@ Must be in accordance with [Google Cloud Platform Terms of Service] (https://clo
 
 == Changelog ==
 
-= 1.0.0 =
-First public release
-= 1.0.2 =
-Changed when to translate and replace permalinks from first publish to first save
-= 1.1.3 =
-Added a function to select Google Cloud Translation API for translation API
-Eliminated error caused by calling before session variable is initialized.
+= 1.2.0 =
+Made it multilingual. Currently, English and Japanese can be displayed on the management screen.
+
 = 1.1.4 =
 Deleted the options recorded in the database when uninstalling the plugin.
 Fixed a bug that an error was not displayed properly when an error was detected in the authentication check on the management screen of Google Cloud Translation API.
-= 1.2.0 =
-Made it multilingual. Currently, English and Japanese can be displayed on the management screen.
+
+= 1.1.3 =
+Added a function to select Google Cloud Translation API for translation API
+Eliminated error caused by calling before session variable is initialized.
+
+= 1.0.2 =
+Changed when to translate and replace permalinks from first publish to first save
+
+= 1.0.0 =
+First public release
 
 == Upgrade notice ==
 
