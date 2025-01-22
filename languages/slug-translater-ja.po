@@ -1,0 +1,208 @@
+# Copyright (C) 2025 WebクリエイターItmaroon
+# This file is distributed under the GPL v2 or later.
+msgid ""
+msgstr ""
+"Project-Id-Version: SLUG TRANSLATER 1.2.1\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/slug-translater\n"
+"POT-Creation-Date: 2025-01-17T13:19:12+01:00\n"
+"PO-Revision-Date: 2025-01-17 22:08+0900\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: ja\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 3.5\n"
+"X-Domain: slug-translater\n"
+
+#. Plugin Name of the plugin
+#: slug_translater.php
+msgid "SLUG TRANSLATER"
+msgstr ""
+
+#. Description of the plugin
+#: slug_translater.php
+msgid ""
+"We translate slugs of Japanese posts, categories, etc. into English and "
+"replace them with the most appropriate format."
+msgstr ""
+"日本語の投稿やカテゴリーなどのスラッグを英語に翻訳し、最適な形式に置き換えま"
+"す。"
+
+#. Author of the plugin
+#: slug_translater.php
+msgid "WebクリエイターItmaroon"
+msgstr ""
+
+#. Author URI of the plugin
+#: slug_translater.php
+msgid "https://itmaroon.net"
+msgstr ""
+
+#: slug_translater.php:200
+msgid "SLUG TRANSLATER setting page"
+msgstr "SLUG TRANSLATER 設定ページ"
+
+#: slug_translater.php:212
+msgid "You do not have sufficient permissions to access this page."
+msgstr "このページにアクセスするための十分な権限がありません。"
+
+#: slug_translater.php:217
+msgid "SLUG TRANSLATER Settings"
+msgstr "SLUG TRANSLATER 設定"
+
+#: slug_translater.php:240
+msgid "Choosing a translation API"
+msgstr "翻訳APIの選択"
+
+#: slug_translater.php:246
+msgid "When to replace slugs with English translations"
+msgstr "スラッグを英語の翻訳に置き換えるタイミング"
+
+#: slug_translater.php:252
+msgid "Permalink settings"
+msgstr "パーマリンク設定"
+
+#: slug_translater.php:258
+msgid "Post type taxonomy to replace slug"
+msgstr "スラッグを置き換える投稿タイプとタクソノミ"
+
+#: slug_translater.php:280
+msgid "Post Type"
+msgstr "投稿タイプ"
+
+#: slug_translater.php:288
+msgid "taxonomies, etc."
+msgstr "タクソノミー等"
+
+#: slug_translater.php:360
+msgid "Choose a translation API."
+msgstr "翻訳APIを選択してください"
+
+#: slug_translater.php:364
+msgid "Unchecking this,"
+msgstr "チェックを外すと、"
+
+#: slug_translater.php:364
+msgid "Disable manual slug renaming."
+msgstr "手動によるスラッグ名の変更ができなくなります。"
+
+#: slug_translater.php:364
+msgid ""
+"Uncheck it only if you always want to automatically replace the slug name."
+msgstr ""
+"スラッグ名を常に自動的に置き換えたい場合にのみ、チェックを外してください。"
+
+#: slug_translater.php:371
+msgid "The permalink setting is \""
+msgstr "パーマリンク設定は、”"
+
+#: slug_translater.php:371
+msgid "”."
+msgstr ""
+
+#: slug_translater.php:371
+msgid "The part of %postname% is translated into English and replaced."
+msgstr "%postname% の部分を英語に翻訳して置き換えます。"
+
+#: slug_translater.php:373
+msgid "Your permalink settings do not contain %postname%."
+msgstr "パーマリンク設定に%postname%が含まれていません。"
+
+#: slug_translater.php:373
+msgid ""
+"Please set it to include %postname% to replace with English translation. "
+"permalink settings"
+msgstr ""
+"英語の翻訳に置き換えるには、%postname% を含めるように設定してください。パー"
+"マリンク設定"
+
+#: slug_translater.php:373 slug_translater.php:388 slug_translater.php:407
+msgid "here"
+msgstr "こちら"
+
+#: slug_translater.php:381
+msgid "--Choose a translation API--"
+msgstr "--選択された翻訳API--"
+
+#: slug_translater.php:382
+msgid "Minna no Jido Honyaku"
+msgstr "みんなの自動翻訳"
+
+#: slug_translater.php:385 slug_translater.php:480
+msgid "Authentication check"
+msgstr "認証チェック"
+
+#: slug_translater.php:387
+msgid "User registration for \"Minna no Jido Honyaku\""
+msgstr "「みんなの自動翻訳」のユーザー登録"
+
+#: slug_translater.php:388
+msgid ""
+"If you have completed user registration, please enter your authentication "
+"information."
+msgstr "ユーザー登録が完了している場合は、認証情報を入力してください。"
+
+#: slug_translater.php:388
+msgid ""
+"\"Minna no Jido Honyaku\" can be used for free, but there is a limit to the "
+"number of accesses per day."
+msgstr ""
+"「みんなの自動翻訳」は無料でご利用いただけますが、1日あたりのアクセス数に制"
+"限がございます。"
+
+#: slug_translater.php:391
+msgid "Login ID"
+msgstr "ログインID"
+
+#: slug_translater.php:405
+msgid ""
+"To use the Google Cloud Translation API, you need to create a project on "
+"Google Cloud Platform (GCP)."
+msgstr ""
+"Google Cloud Translation API を使用するには、Google Cloud Platform (GCP) で"
+"プロジェクトを作成する必要があります。"
+
+#: slug_translater.php:406
+msgid "Creating a project"
+msgstr "プロジェクトの生成は"
+
+#: slug_translater.php:408
+msgid ""
+"Enable the Cloud Translation API in the project you created and get your "
+"credentials."
+msgstr ""
+"作成したプロジェクトで Cloud Translation API を有効にし、認証情報を取得しま"
+"す。"
+
+#: slug_translater.php:409
+msgid "The API is free for up to 500,000 characters per month, beyond"
+msgstr "APIは月間50万文字まで無料で、それ以上は"
+
+#: slug_translater.php:409
+msgid "Billed on a pay-as-you-go basis."
+msgstr "従量課金制で請求されます。"
+
+#: slug_translater.php:412
+msgid "Project ID"
+msgstr "プロジェクトID"
+
+#: slug_translater.php:454
+msgid "Please wait"
+msgstr "お待ちください"
+
+#: slug_translater.php:470
+msgid "Authenticated successfully."
+msgstr "認証に成功しました。"
+
+#: slug_translater.php:472
+msgid "An error has occurred."
+msgstr "エラーが発生しました。"
+
+#: slug_translater.php:492
+msgid "Translate and replace the slugs of the following post types, etc."
+msgstr "以下の投稿タイプのスラッグなどを翻訳して置き換えます。"
+
+#: slug_translater.php:535
+msgid "Replace slug only on first save"
+msgstr "最初の保存時にのみスラッグを置き換える"
