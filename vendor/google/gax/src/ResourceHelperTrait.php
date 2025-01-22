@@ -32,8 +32,6 @@
 
 namespace Google\ApiCore;
 
-use Google\ApiCore\ValidationException;
-
 /**
  * Provides functionality for loading a resource name template map from a descriptor config,
  * retrieving a PathTemplate, and parsing values using registered templates.
@@ -45,11 +43,19 @@ trait ResourceHelperTrait
     /** @var array|null */
     private static $templateMap;
 
-    // Must be implemented by extendees to call loadPathTemplates.
+    /**
+     * placeholder for this function like we have in GapicClientTrait
+     */
+    private static function getClientDefaults()
+    {
+        return [];
+    }
+
     private static function registerPathTemplates()
     {
-        // TODO: Add void return type hint.
-        self::$templateMap = [];
+        $templateConfigPath = self::getClientDefaults()['descriptorsConfigPath'];
+        // self::SERVICE_NAME is a constant set per-client.
+        self::loadPathTemplates($templateConfigPath, self::SERVICE_NAME);
     }
 
     private static function loadPathTemplates(string $configPath, string $serviceName)
@@ -76,7 +82,7 @@ trait ResourceHelperTrait
         return self::$templateMap[$key] ?? null;
     }
 
-    private static function parseFormattedName(string $formattedName, string $template = null): array
+    private static function parseFormattedName(string $formattedName, ?string $template = null): array
     {
         if (is_null(self::$templateMap)) {
             self::registerPathTemplates();

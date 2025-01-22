@@ -4,19 +4,21 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInite0fa1374a719e5d7967d706d35007ca6
+class ComposerStaticInit8a5d698ebb0a1f9e5b253a9a18111820
 {
     public static $files = array (
         '7b11c4dc42b3b3023073cb14e519683c' => __DIR__ . '/..' . '/ralouphie/getallheaders/src/getallheaders.php',
-        'c964ee0ededf28c96ebd9db5099ef910' => __DIR__ . '/..' . '/guzzlehttp/promises/src/functions_include.php',
         '6e3fae29631ef280660b3cdad06f25a8' => __DIR__ . '/..' . '/symfony/deprecation-contracts/function.php',
         '37a3dc5111fe8f707ab4c132ef1dbc62' => __DIR__ . '/..' . '/guzzlehttp/guzzle/src/functions_include.php',
+        'e39a8b23c42d4e1452234d762b03835a' => __DIR__ . '/..' . '/ramsey/uuid/src/functions.php',
     );
 
     public static $prefixLengthsPsr4 = array (
         'R' => 
         array (
             'Rize\\' => 5,
+            'Ramsey\\Uuid\\' => 12,
+            'Ramsey\\Collection\\' => 18,
         ),
         'P' => 
         array (
@@ -67,12 +69,24 @@ class ComposerStaticInite0fa1374a719e5d7967d706d35007ca6
         array (
             'Firebase\\JWT\\' => 13,
         ),
+        'B' => 
+        array (
+            'Brick\\Math\\' => 11,
+        ),
     );
 
     public static $prefixDirsPsr4 = array (
         'Rize\\' => 
         array (
             0 => __DIR__ . '/..' . '/rize/uri-template/src/Rize',
+        ),
+        'Ramsey\\Uuid\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/ramsey/uuid/src',
+        ),
+        'Ramsey\\Collection\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/ramsey/collection/src',
         ),
         'Psr\\Log\\' => 
         array (
@@ -211,6 +225,10 @@ class ComposerStaticInite0fa1374a719e5d7967d706d35007ca6
         array (
             0 => __DIR__ . '/..' . '/firebase/php-jwt/src',
         ),
+        'Brick\\Math\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/brick/math/src',
+        ),
     );
 
     public static $classMap = array (
@@ -226,9 +244,9 @@ class ComposerStaticInite0fa1374a719e5d7967d706d35007ca6
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInite0fa1374a719e5d7967d706d35007ca6::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInite0fa1374a719e5d7967d706d35007ca6::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInite0fa1374a719e5d7967d706d35007ca6::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit8a5d698ebb0a1f9e5b253a9a18111820::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit8a5d698ebb0a1f9e5b253a9a18111820::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit8a5d698ebb0a1f9e5b253a9a18111820::$classMap;
 
         }, null, ClassLoader::class);
     }

@@ -17,9 +17,16 @@ class ErrorDetails
         \GPBMetadata\Google\Protobuf\Duration::initOnce();
         $pool->internalAddGeneratedFile(
             '
-ê
+³	
 google/rpc/error_details.proto
-google.rpc";
+google.rpc"“
+	ErrorInfo
+reason (	
+domain (	5
+metadata (2#.google.rpc.ErrorInfo.MetadataEntry/
+MetadataEntry
+key (	
+value (	:8";
 	RetryInfo.
 retry_delay (2.google.protobuf.Duration"2
 	DebugInfo
@@ -30,27 +37,22 @@ google.rpc";
 violations (2".google.rpc.QuotaFailure.Violation1
 	Violation
 subject (	
-description (	"“
-	ErrorInfo
-reason (	
-domain (	5
-metadata (2#.google.rpc.ErrorInfo.MetadataEntry/
-MetadataEntry
-key (	
-value (	:8"•
+description (	"•
 PreconditionFailure=
 
 violations (2).google.rpc.PreconditionFailure.Violation?
 	Violation
 type (	
 subject (	
-description (	"ƒ
+description (	"Ì
 
 BadRequest?
-field_violations (2%.google.rpc.BadRequest.FieldViolation4
+field_violations (2%.google.rpc.BadRequest.FieldViolation}
 FieldViolation
 field (	
-description (	"7
+description (	
+reason (	7
+localized_message (2.google.rpc.LocalizedMessage"7
 RequestInfo
 
 request_id (	

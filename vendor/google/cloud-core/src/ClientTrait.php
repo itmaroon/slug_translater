@@ -17,8 +17,8 @@
 
 namespace Google\Cloud\Core;
 
-use Google\Auth\CredentialsLoader;
 use Google\Auth\Credentials\GCECredentials;
+use Google\Auth\CredentialsLoader;
 use Google\Cloud\Core\Compute\Metadata;
 use Google\Cloud\Core\Exception\GoogleException;
 
@@ -46,9 +46,7 @@ trait ClientTrait
     {
         $isGrpcExtensionLoaded = $this->isGrpcLoaded();
         $defaultTransport = $isGrpcExtensionLoaded ? 'grpc' : 'rest';
-        $transport = isset($config['transport'])
-            ? strtolower($config['transport'])
-            : $defaultTransport;
+        $transport = strtolower($config['transport'] ?? $defaultTransport);
 
         if ($transport === 'grpc') {
             if (!$isGrpcExtensionLoaded) {
@@ -235,6 +233,8 @@ trait ClientTrait
                 'and we were unable to detect a default project ID.'
             );
         }
+
+        return '';
     }
 
     /**
@@ -256,7 +256,7 @@ trait ClientTrait
      */
     protected function getMetaData()
     {
-        return new Metadata;
+        return new Metadata();
     }
 
     /**

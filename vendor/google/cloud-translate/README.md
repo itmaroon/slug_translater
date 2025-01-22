@@ -19,16 +19,10 @@ Machine Learning API family.
 
 To begin, install the preferred dependency manager for PHP, [Composer](https://getcomposer.org/).
 
-Now to install just this component:
+Now install this component:
 
 ```sh
 $ composer require google/cloud-translate
-```
-
-Or to install the entire suite of components at once:
-
-```sh
-$ composer require google/cloud
 ```
 
 ### Authentication
@@ -111,6 +105,11 @@ REST & HTTP/1.1 only.
 
 The handwritten client can be found under `Google\Cloud\Translate\TranslateClient`, whereas the generated client is
 found under `Google\Cloud\Translate\V3\TranslationServiceClient`.
+
+### Debugging
+
+Please see our [Debugging guide](https://github.com/googleapis/google-cloud-php/blob/main/DEBUG.md)
+for more information about the debugging tools.
 
 ### Version
 

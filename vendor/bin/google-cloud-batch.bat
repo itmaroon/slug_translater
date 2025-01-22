@@ -1,4 +1,5 @@
 @ECHO OFF
 setlocal DISABLEDELAYEDEXPANSION
-SET BIN_TARGET=%~dp0/../google/cloud-core/bin/google-cloud-batch
+SET BIN_TARGET=%~dp0/google-cloud-batch
+SET COMPOSER_RUNTIME_BIN_DIR=%~dp0
 php "%BIN_TARGET%" %*

@@ -1,12 +1,12 @@
 === SLUG TRANSLATER ===
 Contributors: itmaroon
 Tags: slug, translate, custom,permalink,post,category,tags,japanese, english
-Requires at least: 6.1
-Tested up to: 6.1
-Stable tag: 1.2.0
+Requires at least: 6.3
+Tested up to: 6.7.1
+Stable tag: 1.2.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Requires PHP: 7.4
+Requires PHP: 8.2.10
 
 Translate the slug generated in Japanese into English and replace it with an appropriate format.
 
@@ -58,18 +58,29 @@ Must be in accordance with [Google Cloud Platform Terms of Service] (https://clo
 
 == Changelog ==
 
-= 1.0.0 =
-First public release
-= 1.0.2 =
-Changed when to translate and replace permalinks from first publish to first save
-= 1.1.3 =
-Added a function to select Google Cloud Translation API for translation API
-Eliminated error caused by calling before session variable is initialized.
+= 1.2.2 =
+- Fixed a bug where the translation start flag would unintentionally become false when posting a new post.
+
+= 1.2.1 =
+- Session management has been discontinued using $_SESSION and switched to management using user metadata.
+- The condition for translating the slug when posting a new post was changed from when the post status changed from new to auto-draft to when it changed from new to publish.
+
+= 1.2.0 =
+Made it multilingual. Currently, English and Japanese can be displayed on the management screen.
+
 = 1.1.4 =
 Deleted the options recorded in the database when uninstalling the plugin.
 Fixed a bug that an error was not displayed properly when an error was detected in the authentication check on the management screen of Google Cloud Translation API.
-= 1.2.0 =
-Made it multilingual. Currently, English and Japanese can be displayed on the management screen.
+
+= 1.1.3 =
+Added a function to select Google Cloud Translation API for translation API
+Eliminated error caused by calling before session variable is initialized.
+
+= 1.0.2 =
+Changed when to translate and replace permalinks from first publish to first save
+
+= 1.0.0 =
+First public release
 
 == Upgrade notice ==
 
