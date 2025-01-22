@@ -7,7 +7,7 @@ Author:WebクリエイターItmaroon
 Author URI:https://itmaroon.net
 License:      GPL v2 or later
 License URI:  https://www.gnu.org/licenses/gpl-2.0.html
-Text Domain:  sl_trans-text-domain
+Text Domain:  slug-translater
 Domain Path:  /languages
 */
 
@@ -73,7 +73,7 @@ function sl_trans_get_flg()
 //翻訳ファイルの読み込み
 function sl_trans_load_textdomain()
 {
-  load_plugin_textdomain('sl_trans-text-domain', false, basename(dirname(__FILE__)) . '/languages');
+  load_plugin_textdomain('slug-translater', false, basename(dirname(__FILE__)) . '/languages');
 }
 add_action('init', 'sl_trans_load_textdomain');
 
@@ -197,7 +197,7 @@ register_uninstall_hook(__FILE__, 'sl_trans_uninstall');
 function sl_trans_add_admin_menu()
 {
   add_options_page(
-    __('SLUG TRANSLATER setting page', 'sl_trans-text-domain'), // 設定画面のページタイトル.
+    __('SLUG TRANSLATER setting page', 'slug-translater'), // 設定画面のページタイトル.
     'SLUG TRANSLATER', // 管理画面メニューに表示される名前.
     'manage_options',
     'sl_trans_menu', // メニューのスラッグ.
@@ -209,12 +209,12 @@ function sl_trans_menu_page()
 {
   // 権限チェック.
   if (! current_user_can('manage_options')) {
-    wp_die(_e('You do not have sufficient permissions to access this page.', 'sl_trans-text-domain'));
+    wp_die(_e('You do not have sufficient permissions to access this page.', 'slug-translater'));
   }
 
 ?>
   <div class="wrap">
-    <h1><?php _e('SLUG TRANSLATER Settings', 'sl_trans-text-domain') ?></h1>
+    <h1><?php _e('SLUG TRANSLATER Settings', 'slug-translater') ?></h1>
 
     <form method="POST" action="options.php">
       <?php
@@ -237,25 +237,25 @@ function sl_trans_init_settings()
   // 設定のセクション追加.
   add_settings_section(
     'sl_trans_setting-section-1',
-    __('Choosing a translation API', 'sl_trans-text-domain'),
+    __('Choosing a translation API', 'slug-translater'),
     'sl_trans_authorize_section_func', // セクションの説明文を表示するための関数.
     'sl_trans_setting'
   );
   add_settings_section(
     'sl_trans_setting-section-2',
-    __('When to replace slugs with English translations', 'sl_trans-text-domain'),
+    __('When to replace slugs with English translations', 'slug-translater'),
     'sl_trans_timing_section_func',
     'sl_trans_setting'
   );
   add_settings_section(
     'sl_trans_setting-section-3',
-    __('Permalink settings', 'sl_trans-text-domain'),
+    __('Permalink settings', 'slug-translater'),
     'sl_trans_permalink_section_func',
     'sl_trans_setting'
   );
   add_settings_section(
     'sl_trans_setting-section-4',
-    __('Post type taxonomy to replace slug', 'sl_trans-text-domain'),
+    __('Post type taxonomy to replace slug', 'slug-translater'),
     'sl_trans_type_section_func',
     'sl_trans_setting'
   );
@@ -277,7 +277,7 @@ function sl_trans_init_settings()
   );
   add_settings_field(
     'sl_trans_type', // 設定名.
-    __('Post Type', 'sl_trans-text-domain'), // 設定タイトル.
+    __('Post Type', 'slug-translater'), // 設定タイトル.
     'sl_trans_type_func', // 設定項目のHTMLを出力する関数名.
     'sl_trans_setting', // メニュースラッグ.
     'sl_trans_setting-section-4' // どのセクションに表示するか.
@@ -285,7 +285,7 @@ function sl_trans_init_settings()
 
   add_settings_field(
     'sl_trans_tax', // 設定名.
-    __('taxonomies, etc.', 'sl_trans-text-domain'), // 設定タイトル.
+    __('taxonomies, etc.', 'slug-translater'), // 設定タイトル.
     'sl_trans_tax_func', // 設定項目のHTMLを出力する関数名.
     'sl_trans_setting', // メニュースラッグ.
     'sl_trans_setting-section-4' // どのセクションに表示するか.
@@ -357,20 +357,20 @@ function sl_trans_init_settings()
  */
 function sl_trans_authorize_section_func()
 {
-  echo '<p class="authorize_caution">' . __('Choose a translation API.', 'sl_trans-text-domain') . '</p>';
+  echo '<p class="authorize_caution">' . __('Choose a translation API.', 'slug-translater') . '</p>';
 }
 function sl_trans_timing_section_func()
 {
-  echo '<p class="timing_caution">' . __('Unchecking this,', 'sl_trans-text-domain') . '<strong>' . __('Disable manual slug renaming.', 'sl_trans-text-domain') . '</strong><br>' . __('Uncheck it only if you always want to automatically replace the slug name.', 'sl_trans-text-domain') . '</p>';
+  echo '<p class="timing_caution">' . __('Unchecking this,', 'slug-translater') . '<strong>' . __('Disable manual slug renaming.', 'slug-translater') . '</strong><br>' . __('Uncheck it only if you always want to automatically replace the slug name.', 'slug-translater') . '</p>';
 }
 function sl_trans_permalink_section_func()
 {
   global $LINK_FORMAT;
   preg_match('/\%postname\%/', $LINK_FORMAT, $m);
   if (isset($m[0])) {
-    echo '<p class="permalink_caution">' . __('The permalink setting is "', 'sl_trans-text-domain') . esc_html($LINK_FORMAT) . __('”.', 'sl_trans-text-domain') . '<br>' . __('The part of %postname% is translated into English and replaced.', 'sl_trans-text-domain') . '</p>';
+    echo '<p class="permalink_caution">' . __('The permalink setting is "', 'slug-translater') . esc_html($LINK_FORMAT) . __('”.', 'slug-translater') . '<br>' . __('The part of %postname% is translated into English and replaced.', 'slug-translater') . '</p>';
   } else {
-    echo '<p class="permalink_caution"><strong>' . __('Your permalink settings do not contain %postname%.', 'sl_trans-text-domain') . '</strong><br>' . __('Please set it to include %postname% to replace with English translation. permalink settings', 'sl_trans-text-domain') . '<a href="' . esc_url(home_url()) . '/wp-admin/options-permalink.php">' . __('here', 'sl_trans-text-domain') . '</a></p>';
+    echo '<p class="permalink_caution"><strong>' . __('Your permalink settings do not contain %postname%.', 'slug-translater') . '</strong><br>' . __('Please set it to include %postname% to replace with English translation. permalink settings', 'slug-translater') . '<a href="' . esc_url(home_url()) . '/wp-admin/options-permalink.php">' . __('here', 'slug-translater') . '</a></p>';
   }
 }
 
@@ -378,17 +378,17 @@ function sl_trans_select_func()
 {
 ?>
   <select name="sl_trans_engine">
-    <option value=""><?php _e('--Choose a translation API--', 'sl_trans-text-domain') ?></option>
-    <option value="minna"><?php _e('Minna no Jido Honyaku', 'sl_trans-text-domain') ?></option>
+    <option value=""><?php _e('--Choose a translation API--', 'slug-translater') ?></option>
+    <option value="minna"><?php _e('Minna no Jido Honyaku', 'slug-translater') ?></option>
     <option value="google">Google Cloud Translation</option>
   </select>
-  <button type="button" id="api_check"><?php _e('Authentication check', 'sl_trans-text-domain') ?></button>
+  <button type="button" id="api_check"><?php _e('Authentication check', 'slug-translater') ?></button>
   <div class="minna regist">
-    <p class="regist_caution"><?php _e('User registration for "Minna no Jido Honyaku"', 'sl_trans-text-domain') ?><a href="https://mt-auto-minhon-mlt.ucri.jgn-x.jp/" target="_blank">
-        <?php _e('here', 'sl_trans-text-domain') ?></a><br><?php _e('If you have completed user registration, please enter your authentication information.', 'sl_trans-text-domain') ?><br><?php _e('"Minna no Jido Honyaku" can be used for free, but there is a limit to the number of accesses per day.', 'sl_trans-text-domain') ?></p>
+    <p class="regist_caution"><?php _e('User registration for "Minna no Jido Honyaku"', 'slug-translater') ?><a href="https://mt-auto-minhon-mlt.ucri.jgn-x.jp/" target="_blank">
+        <?php _e('here', 'slug-translater') ?></a><br><?php _e('If you have completed user registration, please enter your authentication information.', 'slug-translater') ?><br><?php _e('"Minna no Jido Honyaku" can be used for free, but there is a limit to the number of accesses per day.', 'slug-translater') ?></p>
     <table>
       <tr>
-        <th><?php _e('Login ID', 'sl_trans-text-domain') ?></th>
+        <th><?php _e('Login ID', 'slug-translater') ?></th>
         <td><input type="text" name="sl_trans_ID" value="<?php form_option('sl_trans_ID'); ?>"></td>
       </tr>
       <tr>
@@ -402,14 +402,14 @@ function sl_trans_select_func()
     </table>
   </div><!-- /.minna -->
   <div class="google regist">
-    <p class="regist_caution"><?php _e('To use the Google Cloud Translation API, you need to create a project on Google Cloud Platform (GCP).', 'sl_trans-text-domain') ?><br>
-      <?php _e('Creating a project', 'sl_trans-text-domain') ?><a href="https://console.cloud.google.com/home/dashboard" target="_blank">
-        <?php _e('here', 'sl_trans-text-domain') ?></a><br>
-      <?php _e('Enable the Cloud Translation API in the project you created and get your credentials.', 'sl_trans-text-domain') ?><br>
-      <?php _e('The API is free for up to 500,000 characters per month, beyond', 'sl_trans-text-domain') ?><strong><?php _e('Billed on a pay-as-you-go basis.', 'sl_trans-text-domain') ?></strong></p>
+    <p class="regist_caution"><?php _e('To use the Google Cloud Translation API, you need to create a project on Google Cloud Platform (GCP).', 'slug-translater') ?><br>
+      <?php _e('Creating a project', 'slug-translater') ?><a href="https://console.cloud.google.com/home/dashboard" target="_blank">
+        <?php _e('here', 'slug-translater') ?></a><br>
+      <?php _e('Enable the Cloud Translation API in the project you created and get your credentials.', 'slug-translater') ?><br>
+      <?php _e('The API is free for up to 500,000 characters per month, beyond', 'slug-translater') ?><strong><?php _e('Billed on a pay-as-you-go basis.', 'slug-translater') ?></strong></p>
     <table>
       <tr>
-        <th><?php _e('Project ID', 'sl_trans-text-domain') ?></th>
+        <th><?php _e('Project ID', 'slug-translater') ?></th>
         <td><input type="text" name="sl_trans_google_prid" value="<?php form_option('sl_trans_google_prid'); ?>"></td>
       </tr>
       <tr>
@@ -451,7 +451,7 @@ function sl_trans_select_func()
             regist_arr.push($(this).val());
           }
         });
-        $(this).text(<?php __('Please wait', 'sl_trans-text-domain') ?>);
+        $(this).text(<?php __('Please wait', 'slug-translater') ?>);
         $(this).addClass('checking');
         let btn = $(this);
 
@@ -467,9 +467,9 @@ function sl_trans_select_func()
         }).done(function(data) {
           let ret_data = JSON.parse(data);
           if (ret_data['code'] == 0) {
-            alert("<?php _e('Authenticated successfully.', 'sl_trans-text-domain') ?>");
+            alert("<?php _e('Authenticated successfully.', 'slug-translater') ?>");
           } else {
-            alert("<?php _e('An error has occurred.', 'sl_trans-text-domain') ?>");
+            alert("<?php _e('An error has occurred.', 'slug-translater') ?>");
           }
         }).fail(function(XMLHttpRequest, textStatus, errorThrown) {
           console.log(XMLHttpRequest.status);
@@ -477,7 +477,7 @@ function sl_trans_select_func()
           console.log(errorThrown.message);
 
         }).always(function() {
-          btn.text(<?php __('Authentication check', 'sl_trans-text-domain') ?>);
+          btn.text(<?php __('Authentication check', 'slug-translater') ?>);
           btn.removeClass('checking');
         })
 
@@ -489,7 +489,7 @@ function sl_trans_select_func()
 
 function sl_trans_type_section_func()
 {
-  echo '<p class="type_caution">' . __('Translate and replace the slugs of the following post types, etc.', 'sl_trans-text-domain') . '</p>';
+  echo '<p class="type_caution">' . __('Translate and replace the slugs of the following post types, etc.', 'slug-translater') . '</p>';
 }
 
 //Wordpress投稿情報を取得
@@ -532,7 +532,7 @@ function sl_trans_check_func()
 {
   $option = get_option('sl_trans_timing_check', 'on');
 
-  echo '<label><input type="checkbox" name="sl_trans_timing_check" value="on" ' . checked('on', $option, false) . ' />' . __('Replace slug only on first save', 'sl_trans-text-domain') . '</label> ';
+  echo '<label><input type="checkbox" name="sl_trans_timing_check" value="on" ' . checked('on', $option, false) . ' />' . __('Replace slug only on first save', 'slug-translater') . '</label> ';
 }
 
 /**
